@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-KSHAY WEALTH - Goal Based SIP Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .calculator-container {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(11, 43, 82, 0.1);
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            border: 1px solid #e1e8ed;
+        }
+        /* Logo & Branding Styling */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f4f8;
+        }
+        .logo-box {
+            font-size: 34px;
+            font-weight: bold;
+            color: #0b2b52;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+        .logo-devanagari {
+            font-family: 'Arial Black', sans-serif;
+            display: block;
+            margin-bottom: -5px;
+        }
+        .logo-wealth {
+            font-size: 30px;
+            display: block;
+        }
+        .brand-contact {
+            font-size: 13px;
+            color: #5c728a;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+        h2 {
+            color: #0b2b52;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+        }
+        .input-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #34495e;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus {
+            border-color: #0b2b52;
+            box-shadow: 0 0 0 3px rgba(11, 43, 82, 0.1);
+            outline: none;
+        }
+        .custom-goal-box {
+            display: none;
+            margin-top: 10px;
+        }
+        button.btn-calculate {
+            width: 100%;
+            background-color: #0b2b52;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button.btn-calculate:hover {
+            background-color: #061a33;
+        }
+        /* Results Section */
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f4f9ff;
+            border-left: 5px solid #0b2b52;
+            border-radius: 6px;
+            display: none;
+        }
+        .result-box h3 {
+            color: #0b2b52;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+        .result-value {
+            font-size: 26px;
+            font-weight: bold;
+            color: #2ecc71;
+            margin-bottom: 8px;
+        }
+        .details {
+            font-size: 14px;
+            color: #5c728a;
+            line-height: 1.5;
+        }
+        .contact-us-btn {
+            display: none;
+            margin-top: 18px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            font-size: 16px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .contact-us-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        /* POPUP SCREEN OVERLAY (CENTER MODAL) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .whatsapp-popup-card {
+            background: linear-gradient(135deg, #ffffff, #f4f9ff);
+            max-width: 420px;
+            width: 90%;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.4s ease;
+        }
+        .modal-overlay.show .whatsapp-popup-card {
+            transform: scale(1);
+        }
+        .modal-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0b2b52;
+            margin-bottom: 15px;
+        }
+        .whatsapp-popup-card h4 {
+            color: #0b2b52;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .whatsapp-popup-card p {
+            font-size: 14px;
+            color: #5c728a;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        /* Buttons inside popup */
+        .popup-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .whatsapp-btn {
+            display: block;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            font-size: 16px;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        /* CLOSE BUTTON - Card ni right side set karyu che */
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            font-size: 26px;
+            color: #94a3b8;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .close-popup:hover {
+            color: #ef4444; /* Hover par red thase */
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-container">
+    <div class="brand-header">
+        <div class="logo-box">
+            <span class="logo-devanagari">અ–ક્ષય</span>
+            <span class="logo-wealth">Wealth</span>
+        </div>
+        <div class="brand-contact">📞 Call/WhatsApp: +91 7383666008</div>
+    </div>
+
+    <h2>🎯 Goal-Based SIP Calculator</h2>
+    
+    <div class="input-group">
+        <label for="goalSelect">તમારો ગોલ પસંદ કરો (Select Goal):</label>
+        <select id="goalSelect" onchange="toggleCustomGoal()">
+            <option value="નવું ઘર">🏠 નવું ઘર (New House)</option>
+            <option value="નવી કાર">🚗 નવી કાર (New Car)</option>
+            <option value="બાળકોનું શિક્ષણ">🎓 બાળકોનું શિક્ષણ (Child Education)</option>
+            <option value="લગ્ન">💍 લગ્ન (Marriage)</option>
+            <option value="રિટાયરમેન્ટ">👴 રિટાયરમેન્ટ (Retirement Fund)</option>
+            <option value="custom">✏️ અન્ય ગોલ (Write Custom Goal)</option>
+        </select>
+        <div id="customGoalWrapper" class="custom-goal-box">
+            <input type="text" id="customGoalName" placeholder="તમારા ગોલનું નામ લખો">
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label for="targetAmount">ગોલ પૂરો કરવા જરૂરી રકમ (Target Amount - ₹):</label>
+        <input type="number" id="targetAmount" placeholder="દા.ત. 2500000" min="1">
+    </div>
+
+    <div class="input-group">
+        <label for="years">કેટલા વર્ષમાં ગોલ પૂરો કરવો છે? (Years):</label>
+        <input type="number" id="years" placeholder="દા.ત. 15" min="1">
+    </div>
+
+    <div class="input-group">
+        <label for="expectedReturn">અંદાજિત વળતર (Expected Return - % Yearly):</label>
+        <select id="expectedReturn">
+            <option value="12" selected>12% (Conservative Equity)</option>
+            <option value="13">13% (Balanced Growth)</option>
+            <option value="15">15% (Aggressive Growth)</option>
+            <option value="18">18% (High Growth)</option>
+        </select>
+    </div>
+
+    <button class="btn-calculate" onclick="calculateGoalSIP()">ગણતરી કરો</button>
+
+    <div class="result-box" id="resultBox">
+        <h3 id="resGoalTitle">તમારા ગોલ માટે:</h3>
+        <p class="details" style="margin-bottom: 5px;">તમારે દર મહિને આશરે આટલી SIP કરવી પડશે:</p>
+        <div class="result-value" id="sipAmount">₹0</div>
+        <div class="details" id="resDetails"></div>
+    </div>
+
+    <a href="https://wa.me/917383666008" id="contactUsBtn" target="_blank" class="contact-us-btn">📞 Contact Us / SIP શરૂ કરો</a>
+</div>
+
+<div class="modal-overlay" id="popupOverlay">
+    <div class="whatsapp-popup-card">
+        <button class="close-popup" onclick="closePopup()">×</button>
+        
+        <div class="modal-logo">📈 અ-ક્ષય Wealth</div>
+        <h4>તમારો ગોલ પૂરો કરવા તૈયાર છો?</h4>
+        <p>આજે જ અ-ક્ષય વેલ્થ સાથે તમારી યોગ્ય મ્યુચ્યુઅલ ફંડ SIP શરૂ કરો અને તમારા સપના સાકાર કરો.</p>
+        
+        <div class="popup-buttons-container">
+            <a href="https://wa.me/917383666008" id="whatsappLink" target="_blank" class="whatsapp-btn">💬 SIP સ્ટાર્ટ કરવા મેસેજ કરો</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Custom goal box ne show/hide karva mate
+    function toggleCustomGoal() {
+        const goalSelect = document.getElementById('goalSelect').value;
+        const customBox = document.getElementById('customGoalWrapper');
+        if (goalSelect === 'custom') {
+            customBox.style.display = 'block';
+        } else {
+            customBox.style.display = 'none';
+        }
+    }
+
+    function showPopup() {
+        document.getElementById('popupOverlay').classList.add('show');
+    }
+
+    function closePopup() {
+        document.getElementById('popupOverlay').classList.remove('show');
+    }
+
+    function calculateGoalSIP() {
+        // Goal name select box mathi levu
+        const goalSelect = document.getElementById('goalSelect').value;
+        let goalName = goalSelect;
+        if (goalSelect === 'custom') {
+            goalName = document.getElementById('customGoalName').value || "તમારા સપના";
+        }
+
+        const targetAmount = parseFloat(document.getElementById('targetAmount').value);
+        const years = parseInt(document.getElementById('years').value);
+        const expectedReturn = parseFloat(document.getElementById('expectedReturn').value);
+
+        // Validation
+        if (isNaN(targetAmount) || isNaN(years) || targetAmount <= 0 || years <= 0) {
+            alert("કૃપા કરીને બધી સાચી રકમ અને વર્ષોની વિગત ભરો.");
+            return;
+        }
+
+        const i = (expectedReturn / 100) / 12;
+        const n = years * 12;
+
+        const base = Math.pow(1 + i, n) - 1;
+        const monthlySIP = targetAmount / ((base / i) * (1 + i));
+
+        const formattedSIP = new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        }).format(monthlySIP);
+
+        const formattedTarget = new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        }).format(targetAmount);
+
+        document.getElementById('resGoalTitle').innerText = `🎯 ${goalName} માટે ગણતરી:`;
+        document.getElementById('sipAmount').innerText = formattedSIP + " / મહિને";
+        document.getElementById('resDetails').innerHTML = `
+            જો તમે <strong>${years} વર્ષ</strong> સુધી સતત રોકાણ કરશો અને અંદાજિત <strong>${expectedReturn}%</strong> રીટર્ન મળશે, તો તમે <strong>${formattedTarget}</strong> નો ટાર્ગેટ મેળવી શકશો.
+        `;
+
+        // Result box screen par dakhavo
+        document.getElementById('resultBox').style.display = 'block';
+        document.getElementById('contactUsBtn').style.display = 'block';
+
+        // Dynamic WhatsApp Messages
+        const phoneNumber = "917383666008";
+        const whatsappMsg = `હેલો અ-ક્ષય વેલ્થ, હું મારા "${goalName}" ના ગોલ માટે ₹${formattedTarget} મેળવવા દર મહિને આશરે ${formattedSIP} ની SIP શરૂ કરવા માંગુ છું. કૃપા કરીને મને ગાઈડ કરો.`;
+        const encodedMsg = encodeURIComponent(whatsappMsg);
+        
+        // Popup button ane result niche Contact Us button update karo
+        document.getElementById('whatsappLink').href = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
+        document.getElementById('contactUsBtn').href = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
+
+        // 2) LAST MA CALCULATE BUTTON PAR CLICK KARYA NA EXACT 10 SECOND PACHHI POPUP AAVSE
+        setTimeout(function() {
+            showPopup();
+        }, 10000); // 10000 milliseconds = 10 Seconds
+    }
+</script>
+
+</body>
+</html>
