@@ -263,7 +263,7 @@
         <select id="goalSelect" onchange="toggleCustomGoal()">
             <option value="નવું ઘર">🏠 નવું ઘર (New House)</option>
             <option value="નવી કાર">🚗 નવી કાર (New Car)</option>
-            <option value="બાળકોનું શિક્ષણ">🎓 બાળકોનું શિક્ષણ (Child Education)</option>
+            <option value="બાળકોનું શિક્ષણ">🎓બાળકોનું શિક્ષણ (Child Education)</option>
             <option value="લગ્ન">💍 લગ્ન (Marriage)</option>
             <option value="રિટાયરમેન્ટ">👴 રિટાયરમેન્ટ (Retirement Fund)</option>
             <option value="custom">✏️ અન્ય ગોલ (Write Custom Goal)</option>
